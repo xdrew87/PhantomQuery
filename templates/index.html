@@ -1,0 +1,1336 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhantomQuery Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --bg-dark: #0f172a;
+            --bg-light: #f8f9fa;
+            --text-muted: #6c757d;
+            --border-color: rgba(233, 236, 239, 0.8);
+            --card-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            --transition-bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Particle animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 47% 33%, #1e293b 0, transparent 59%), 
+                radial-gradient(at 82% 65%, #0f172a 0, transparent 55%);
+            padding: 2rem 0;
+            color: var(--secondary);
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .jailbird-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.97);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), 
+                        0 0 0 1px rgba(255,255,255,0.1),
+                        inset 0 0 0 1px rgba(255,255,255,0.2);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            animation: fadeIn 1s ease-out;
+            transform: translateY(0);
+            transition: transform 0.4s var(--transition-bezier), 
+                        box-shadow 0.4s ease-out;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .jailbird-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .jailbird-container:hover::before {
+            opacity: 1;
+        }
+        
+        .jailbird-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4),
+                        0 0 0 1px rgba(255,255,255,0.15),
+                        inset 0 0 0 1px rgba(255,255,255,0.3);
+        }
+        
+        .header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+        
+        .header h1 {
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+        
+        .header .badge {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            animation: pulse 3s infinite;
+            box-shadow: 0 2px 10px rgba(41, 128, 185, 0.5);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--border-color);
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.5s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .stat-item {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .lookup-card {
+            margin-bottom: 1.5rem;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.4s var(--transition-bezier);
+            animation: fadeIn 0.6s ease-out;
+            animation-fill-mode: both;
+            overflow: hidden;
+        }
+        
+        .lookup-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+        
+        .lookup-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+        
+        .lookup-card:hover {
+            box-shadow: var(--card-shadow);
+            transform: translateY(-8px) scale(1.01);
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            border-bottom: none;
+            font-weight: 600;
+            color: var(--secondary);
+            padding: 1.2rem 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), rgba(52, 152, 219, 0.2));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .lookup-card:hover .card-header::before {
+            transform: scaleX(1);
+        }
+        
+        .lookup-icon {
+            margin-right: 0.75rem;
+            color: var(--primary);
+            transition: transform 0.3s var(--transition-bezier);
+            display: inline-block;
+        }
+        
+        .lookup-card:hover .lookup-icon {
+            transform: scale(1.3) rotate(15deg);
+            color: var(--primary-dark);
+        }
+
+        .card-tools {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+
+        .card-tools .btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 0.3rem;
+            background: rgba(248, 249, 250, 0.9);
+            border: none;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+
+        .card-tools .btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(15deg);
+        }
+        
+        .result-container {
+            background-color: rgba(248, 249, 250, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2.5rem;
+            border-left: 5px solid var(--primary);
+            animation: slideInUp 0.5s ease-out;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), transparent);
+            z-index: -1;
+        }
+        
+        .result-container:hover {
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+        
+        .result-container h5 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+        
+        .result-container h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .result-container:hover h5::after {
+            width: 100%;
+        }
+
+        .result-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .result-actions .btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .result-actions .btn:hover {
+            transform: scale(1.1);
+            background-color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 0.6rem 1.8rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+            border-radius: 30px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
+        }
+        
+        .btn-primary:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(41, 128, 185, 0.5);
+        }
+        
+        .btn-primary:hover:before {
+            left: 100%;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(41, 128, 185, 0.5);
+        }
+
+        .btn-primary.btn-sm {
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            font-weight: 500;
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
+        }
+        
+        .nav-tabs {
+            border-bottom: none;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .nav-tabs::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+        }
+        
+        .nav-tabs .nav-link {
+            border-radius: 30px;
+            padding: 0.7rem 1.5rem;
+            margin-right: 0.5rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.3s var(--transition-bezier);
+            border: 1px solid transparent;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(41, 128, 185, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .nav-tabs .nav-link:not(.active):hover {
+            background-color: rgba(240, 242, 245, 0.8);
+            transform: translateY(-3px);
+            border-color: var(--border-color);
+        }
+        
+        .nav-tabs .nav-link i {
+            margin-right: 6px;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link:hover i {
+            transform: scale(1.2);
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            background-color: rgba(248, 249, 250, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .json-formatter {
+            margin-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .json-key {
+            color: #0b6efd;
+            font-weight: 600;
+        }
+
+        .json-string {
+            color: #28a745;
+        }
+
+        .json-number {
+            color: #d63384;
+        }
+
+        .json-boolean {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .form-control, .form-select {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.01);
+            font-size: 0.95rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.25);
+            border-color: var(--primary);
+            background-color: white;
+        }
+        
+        .form-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .input-group-text {
+            background-color: rgba(248, 249, 250, 0.8);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+        }
+
+        .advanced-options {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .advanced-options.show {
+            display: block;
+        }
+
+        .toggle-advanced {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-top: 0.5rem;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .toggle-advanced:hover {
+            text-decoration: underline;
+        }
+
+        .toggle-advanced i {
+            transition: transform 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .toggle-advanced.active i {
+            transform: rotate(90deg);
+        }
+        
+        /* Loading animation for buttons */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+        
+        .btn-loading i.fa-search {
+            display: none;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            position: absolute;
+            left: calc(50% - 8px);
+            top: calc(50% - 8px);
+            animation: rotate 1s linear infinite;
+        }
+
+        .form-floating > .form-control,
+        .form-floating > .form-select {
+            height: calc(3.5rem + 2px);
+            padding: 1rem 0.75rem;
+        }
+
+        .form-floating > label {
+            padding: 1rem 0.75rem;
+        }
+
+        .tooltip-inner {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+
+        .custom-tooltip {
+            --bs-tooltip-bg: rgba(52, 152, 219, 0.95);
+        }
+        
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+            }
+        }
+        
+        /* Typing animation for result */
+        .typing-animation {
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+        
+        /* Neon glow effect for elements */
+        .neon-glow {
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.7),
+                       0 0 20px rgba(52, 152, 219, 0.5),
+                       0 0 30px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .jailbird-container {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .lookup-card {
+                margin-bottom: 1rem;
+            }
+
+            .stats-bar {
+                flex-wrap: wrap;
+            }
+            
+            .stat-item {
+                flex-basis: 50%;
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .jailbird-container {
+                background-color: rgba(30, 41, 59, 0.97);
+                color: #e2e8f0;
+            }
+            
+            .card-header {
+                background: linear-gradient(to right, #1e293b, #2c3e50);
+                color: #e2e8f0;
+            }
+            
+            pre, .form-control, .form-select {
+                background-color: rgba(15, 23, 42, 0.7);
+                border-color: rgba(51, 65, 85, 0.8);
+                color: #e2e8f0;
+            }
+            
+            .form-text, .stat-label {
+                color: #94a3b8;
+            }
+            
+            .result-container {
+                background-color: rgba(30, 41, 59, 0.95);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated particles background -->
+    <div class="particles" id="particles-js"></div>
+    
+    <div class="container jailbird-container animate__animated animate__fadeIn">
+        <div class="header animate__animated animate__fadeInDown">
+            <h1>PhantomQuery OSINT Tool</h1>
+            <p class="subtitle">Advanced intelligence gathering platform</p>
+            <span class="badge bg-primary">Phone • Inmate • Email</span>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="total-lookups">124</div>
+                <div class="stat-label">Total Lookups</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="phone-lookups">58</div>
+                <div class="stat-label">Phone Searches</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="inmate-lookups">37</div>
+                <div class="stat-label">Inmate Searches</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="email-lookups">29</div>
+                <div class="stat-label">Email Searches</div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs animate__animated animate__fadeInUp" id="lookupTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="phone-tab" data-bs-toggle="tab" data-bs-target="#phone-lookup" type="button" role="tab" aria-controls="phone-lookup" aria-selected="true" data-bs-toggle="tooltip" data-bs-placement="top" title="Search phone numbers globally">
+                    <i class="fas fa-phone"></i> Phone Lookup
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="inmate-tab" data-bs-toggle="tab" data-bs-target="#inmate-lookup" type="button" role="tab" aria-controls="inmate-lookup" aria-selected="false" data-bs-toggle="tooltip" data-bs-placement="top" title="Find inmates in correctional facilities">
+                    <i class="fas fa-user-lock"></i> Inmate Lookup
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email-lookup" type="button" role="tab" aria-controls="email-lookup" aria-selected="false" data-bs-toggle="tooltip" data-bs-placement="top" title="Search for email breaches and profiles">
+                    <i class="fas fa-envelope"></i> Email Lookup
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="lookupTabsContent">
+            <!-- Phone Lookup Tab -->
+            <div class="tab-pane fade show active animate__animated animate__fadeIn" id="phone-lookup" role="tabpanel" aria-labelledby="phone-tab">
+                <div class="card lookup-card">
+                    <div class="card-header">
+                        <i class="fas fa-phone lookup-icon"></i> Phone Number Lookup
+                        <div class="card-tools">
+                            <button class="btn" data-bs-toggle="tooltip" title="Help"><i class="fas fa-question"></i></button>
+                            <button class="btn" data-bs-toggle="tooltip" title="Recent searches"><i class="fas fa-history"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/phone_lookup" class="lookup-form">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="+1234567890"/>
+                                </div>
+                                <div class="form-text">Enter a phone number with country code to get detailed information</div>
+                            </div>
+                            
+                            <div class="toggle-advanced">
+                                <i class="fas fa-chevron-right"></i> Advanced Options
+                            </div>
+                            
+                            <div class="advanced-options">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="region" class="form-label">Default Region:</label>
+                                        <select class="form-select" id="region" name="region">
+                                            <option value="US">United States</option>
+                                            <option value="GB">United Kingdom</option>
+                                            <option value="CA">Canada</option>
+                                            <option value="AU">Australia</option>
+                                            <option value="ID">Indonesia</option>
+                                            <!-- Add more countries as needed -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lookup_type" class="form-label">Lookup Type:</label>
+                                        <select class="form-select" id="lookup_type" name="lookup_type">
+                                            <option value="basic">Basic (Fast)</option>
+                                            <option value="standard" selected>Standard</option>
+                                            <option value="deep">Deep Scan (Slower)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="save_history" name="save_history" checked>
+                                        <label class="form-check-label" for="save_history">Save to search history</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-primary search-btn">
+                                    <i class="fas fa-search"></i> Scan Phone
+                                </button>
+                                <button type="button" class="btn btn-outline-primary btn-sm ms-2">
+                                    <i class="fas fa-random"></i> Sample
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inmate Lookup Tab -->
+            <div class="tab-pane fade animate__animated animate__fadeIn" id="inmate-lookup" role="tabpanel" aria-labelledby="inmate-tab">
+                <div class="card lookup-card">
+                    <div class="card-header">
+                        <i class="fas fa-user-lock lookup-icon"></i> Inmate Lookup
+                        <div class="card-tools">
+                            <button class="btn" data-bs-toggle="tooltip" title="Help"><i class="fas fa-question"></i></button>
+                            <button class="btn" data-bs-toggle="tooltip" title="Recent searches"><i class="fas fa-history"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/inmate_lookup" class="lookup-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">First Name:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="John"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">Last Name:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Doe"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="state" class="form-label">State:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                    <select class="form-select" id="state" name="state">
+                                        <option value="" selected>Select a state</option>
+                                        <option value="ALL">All States</option>
+                                        <option value="AL">Alabama</option>
+                                        <option value="AK">Alaska</option>
+                                        <option value="AZ">Arizona</option>
+                                        <!-- Add all states here -->
+                                        <option value="WY">Wyoming</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-advanced">
+                                <i class="fas fa-chevron-right"></i> Advanced Options
+                            </div>
+                            
+                            <div class="advanced-options">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="inmate_id" class="form-label">Inmate ID (optional):</label>
+                                        <input type="text" class="form-control" id="inmate_id" name="inmate_id" placeholder="ID number if known"/>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="facility" class="form-label">Facility (optional):</label>
+                                        <input type="text" class="form-control" id="facility" name="facility" placeholder="Prison or jail name"/>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="include_released" name="include_released">
+                                        <label class="form-check-label" for="include_released">Include released inmates</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary search-btn">
+                                <i class="fas fa-search"></i> Find Inmate
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Lookup Tab -->
+            <div class="tab-pane fade animate__animated animate__fadeIn" id="email-lookup" role="tabpanel" aria-labelledby="email-tab">
+                <div class="card lookup-card">
+                    <div class="card-header">
+                        <i class="fas fa-envelope lookup-icon"></i> Email Lookup
+                        <div class="card-tools">
+                            <button class="btn" data-bs-toggle="tooltip" title="Help"><i class="fas fa-question"></i></button>
+                            <button class="btn" data-bs-toggle="tooltip" title="Recent searches"><i class="fas fa-history"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="/email_lookup" class="lookup-form">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="example@domain.com"/>
+                                </div>
+                                <div class="form-text">Search for breached accounts, social profiles and more</div>
+                            </div>
+                            
+                            <div class="toggle-advanced">
+                                <i class="fas fa-chevron-right"></i> Advanced Options
+                            </div>
+                            
+                            <div class="advanced-options">
+                                <div class="mb-3">
+                                    <label class="form-label">Search Options:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="check_breaches" name="check_breaches" checked>
+                                        <label class="form-check-label" for="check_breaches">
+                                            Check data breaches
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="check_social" name="check_social" checked>
+                                        <label class="form-check-label" for="check_social">
+                                            Find social media profiles
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="check_domains" name="check_domains" checked>
+                                        <label class="form-check-label" for="check_domains">
+                                            Domain information
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary search-btn">
+                                <i class="fas fa-search"></i> Scan Email
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if result %}
+        <div class="result-container animate__animated animate__fadeInUp">
+            <div class="result-actions">
+                <button class="btn" data-bs-toggle="tooltip" title="Copy results" onclick="copyResults()">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <button class="btn" data-bs-toggle="tooltip" title="Download results" onclick="downloadResults()">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="btn" data-bs-toggle="tooltip" title="Clear results" onclick="clearResults()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <h5 class="mb-3">
+                <i class="fas fa-clipboard-list me-2"></i> Results:
+            </h5>
+            
+            <div class="border rounded p-3 bg-light">
+                <pre id="result-content">{{ result }}</pre>
+            </div>
+            
+            <div class="mt-3 text-center">
+                <button class="btn btn-outline-primary btn-sm json-format-btn">
+                    <i class="fas fa-code"></i> Format as JSON
+                </button>
+                <button class="btn btn-outline-primary btn-sm ms-2">
+                    <i class="fas fa-chart-line"></i> Visualize Data
+                </button>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="mt-4 text-center text-muted small">
+            <p>PhantomQuery OSINT Tool v1.0.2 | &copy; 2025 | <a href="#" class="text-decoration-none">Privacy Policy</a> | <a href="#" class="text-decoration-none">Terms of Use</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl, {
+                customClass: 'custom-tooltip'
+            });
+        });
+        
+        // Add tab switch animations
+        document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', event => {
+                const targetId = event.target.getAttribute('data-bs-target');
+                const target = document.querySelector(targetId);
+                
+                // Reset animation
+                target.style.animation = 'none';
+                target.offsetHeight; // Force reflow
+                target.style.animation = null;
+                
+                // Add fade in animation
+                target.classList.add('animate__animated', 'animate__fadeIn');
+                
+                // Remove animation classes after animation ends
+                setTimeout(() => {
+                    target.classList.remove('animate__animated', 'animate__fadeIn');
+                }, 1000);
+            });
+        });
+
+        // Advanced options toggle
+        document.querySelectorAll('.toggle-advanced').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const advancedOptions = toggle.nextElementSibling;
+                toggle.classList.toggle('active');
+                advancedOptions.classList.toggle('show');
+            });
+        });
+
+        // Handle form submissions with loading animation
+        document.querySelectorAll('.lookup-form').forEach(form => {
+            form.addEventListener('submit', event => {
+                const button = form.querySelector('.search-btn');
+                button.classList.add('btn-loading');
+                
+                // Update stats counter
+                updateStats(form.getAttribute('action'));
+            });
+        });
+        
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#3498db"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#3498db",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.6
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Add typing animation for results if they exist
+            if (document.getElementById('result-content')) {
+                const resultContent = document.getElementById('result-content');
+                const text = resultContent.innerText;
+                
+                // Only animate if the result isn't too long (improve performance)
+                if (text.length < 1000) {
+                    resultContent.innerText = '';
+                    let i = 0;
+                    
+                    function typeWriter() {
+                        if (i < text.length) {
+                            resultContent.innerText += text.charAt(i);
+                            i++;
+                            setTimeout(typeWriter, 15); // Typing speed
+                        }
+                    }
+                    
+                    setTimeout(typeWriter, 500); // Start after 500ms delay
+                }
+            }
+            
+            // Initialize counters with animation
+            animateCounters();
+        });
+        
+        // Function to animate number counters
+        function animateCounters() {
+            document.querySelectorAll('.stat-value').forEach(counter => {
+                const target = parseInt(counter.innerText);
+                const duration = 1500;
+                const step = target / (duration / 30);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    
+                    if (current >= target) {
+                        counter.innerText = target;
+                        clearInterval(timer);
+                    } else {
+                        counter.innerText = Math.floor(current);
+                    }
+                }, 30);
+            });
+        }
+        
+        // Function to update stats
+        function updateStats(action) {
+            const totalCounter = document.getElementById('total-lookups');
+            let currentTotal = parseInt(totalCounter.textContent);
+            totalCounter.textContent = currentTotal + 1;
+            
+            if (action.includes('phone')) {
+                const phoneCounter = document.getElementById('phone-lookups');
+                let currentPhone = parseInt(phoneCounter.textContent);
+                phoneCounter.textContent = currentPhone + 1;
+            } else if (action.includes('inmate')) {
+                const inmateCounter = document.getElementById('inmate-lookups');
+                let currentInmate = parseInt(inmateCounter.textContent);
+                inmateCounter.textContent = currentInmate + 1;
+            } else if (action.includes('email')) {
+                const emailCounter = document.getElementById('email-lookups');
+                let currentEmail = parseInt(emailCounter.textContent);
+                emailCounter.textContent = currentEmail + 1;
+            }
+        }
+        
+        // Copy results function
+        function copyResults() {
+            const resultContent = document.getElementById('result-content');
+            navigator.clipboard.writeText(resultContent.textContent)
+                .then(() => {
+                    // Show success notification
+                    const tooltip = bootstrap.Tooltip.getInstance(document.querySelector('.result-actions .btn:first-child'));
+                    tooltip.hide();
+                    document.querySelector('.result-actions .btn:first-child').setAttribute('data-bs-original-title', 'Copied!');
+                    tooltip.show();
+                    
+                    // Reset tooltip text after 2 seconds
+                    setTimeout(() => {
+                        document.querySelector('.result-actions .btn:first-child').setAttribute('data-bs-original-title', 'Copy results');
+                    }, 2000);
+                });
+        }
+        
+        // Download results function
+        function downloadResults() {
+            const resultContent = document.getElementById('result-content').textContent;
+            const blob = new Blob([resultContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'PhantomQuery-results.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Clear results function
+        function clearResults() {
+            const container = document.querySelector('.result-container');
+            container.classList.add('animate__fadeOutDown');
+            
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 500);
+        }
+        
+        // JSON formatter
+        document.querySelectorAll('.json-format-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const resultContent = document.getElementById('result-content');
+                try {
+                    // Try to parse as JSON
+                    const jsonData = JSON.parse(resultContent.textContent);
+                    const formatted = JSON.stringify(jsonData, null, 2);
+                    
+                    // Highlight JSON syntax
+                    const highlighted = formatted
+                        .replace(/"(\w+)":/g, '<span class="json-key">"$1"</span>:')
+                        .replace(/"([^"]+)"/g, '<span class="json-string">"$1"</span>')
+                        .replace(/\b(\d+)\b/g, '<span class="json-number">$1</span>')
+                        .replace(/\b(true|false|null)\b/g, '<span class="json-boolean">$1</span>');
+                    
+                    resultContent.innerHTML = highlighted;
+                    btn.innerHTML = '<i class="fas fa-file-alt"></i> View as Text';
+                    btn.classList.add('json-active');
+                    
+                    // Change button behavior for toggling back
+                    btn.onclick = function() {
+                        resultContent.textContent = JSON.stringify(jsonData, null, 2);
+                        btn.innerHTML = '<i class="fas fa-code"></i> Format as JSON';
+                        btn.classList.remove('json-active');
+                        btn.onclick = null; // Reset onclick
+                    };
+                } catch (e) {
+                    // Not valid JSON
+                    console.log("Not valid JSON:", e);
+                    
+                    // Show error notification
+                    const tooltip = bootstrap.Tooltip.getInstance(btn);
+                    if (tooltip) tooltip.hide();
+                    btn.setAttribute('data-bs-original-title', 'Not valid JSON data');
+                    new bootstrap.Tooltip(btn, {
+                        customClass: 'custom-tooltip'
+                    }).show();
+                    
+                    // Reset tooltip text after 2 seconds
+                    setTimeout(() => {
+                        btn.setAttribute('data-bs-original-title', 'Format as JSON');
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

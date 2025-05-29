@@ -1,3 +1,4 @@
+
 # PhantomQuery OSINT Tool
 
 ![PhantomQuery Logo](assets/logo.png)
@@ -16,7 +17,7 @@ PhantomQuery is an advanced intelligence gathering platform designed to provide 
 
 ## Screenshots
 
-![Dashboard](assets/dashboard.png)
+![Screenshot 2025-05-29 195029](https://github.com/user-attachments/assets/3f1ff3c4-b2cc-47ba-934b-ebe7b4ad6e1b)
 ![Search Results](assets/results.png)
 
 ## Installation

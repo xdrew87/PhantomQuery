@@ -1,7 +1,7 @@
 
 # PhantomQuery OSINT Tool
 
-![PhantomQuery Logo](assets/PhantomQuery.png)
+![PhantomQuery Logo](asstes/PhantomQuery.png)
 
 ## Overview
 

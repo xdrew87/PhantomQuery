@@ -14,6 +14,7 @@ PhantomQuery is an advanced intelligence gathering platform designed to provide 
 - **Email Lookup**: Search for email breaches and connected profiles across the web.
 - **JSON Formatting**: Built-in JSON parser and formatter for better data visualization.
 - **Export Options**: Download results in various formats for further analysis.
+- **CLI : This also has a command line if you dont want to use the web dashboard 
 
 ## Screenshots
 
@@ -27,13 +28,16 @@ PhantomQuery is an advanced intelligence gathering platform designed to provide 
 3. Install requirements:
 
    ```bash
+   git clone https://github.com/xdrew87/PhantomQuery.git
+   cd PhantomQuery
    pip install -r requirements.txt
+   python main.py --name "john doe" --state "Texas"
    ```
 
 4. Run the application:
 
    ```bash
-   python app.py
+   python wedapp.py
    ```
 
 ## Usage

@@ -31,4 +31,4 @@ This Agreement shall be governed by and construed in accordance with the laws of
 For inquiries or permission requests, contact:
 [Suicixde]
 Email: galmx@proton.me
-Website: phttps://github.com/xdrew87/PhantomQuery.git
+Website: https://github.com/xdrew87/PhantomQuery.git

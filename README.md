@@ -14,7 +14,7 @@ PhantomQuery is an advanced intelligence gathering platform designed to provide 
 - **Email Lookup**: Search for email breaches and connected profiles across the web.
 - **JSON Formatting**: Built-in JSON parser and formatter for better data visualization.
 - **Export Options**: Download results in various formats for further analysis.
-- **CLI : This also has a command line if you dont want to use the web dashboard 
+- **CLI**: This also has a command line if you dont want to use the web dashboard 
 
 ## Screenshots
 

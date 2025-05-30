@@ -32,9 +32,10 @@ PhantomQuery is an advanced intelligence gathering platform designed to provide 
    cd PhantomQuery
    pip install -r requirements.txt
    python main.py --name "john doe" --state "Texas"
+   python main.py --phone "+1234567890"
    ```
 
-4. Run the application:
+4. Run the web dashboard:
 
    ```bash
    python wedapp.py

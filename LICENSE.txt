@@ -1,0 +1,34 @@
+PhantomQuery Software License Agreement (Proprietary EULA)
+Version 1.0 – Effective May 29, 2025
+Copyright © 2025 [Suicixde]. All rights reserved.
+
+1. Grant of License
+This Agreement permits the User to install and use PhantomQuery (the "Software") solely for personal or internal business use. This license is non-transferable, non-exclusive, and revocable.
+
+2. Restrictions
+You may not, under any circumstance:
+- Copy, modify, decompile, disassemble, or reverse engineer any part of the Software.
+- Reproduce, redistribute, sell, lease, or sublicense the Software to any third party.
+- Use the Software to create derivative works or competing products.
+- Use the Software in violation of any law or regulation.
+
+3. Ownership
+PhantomQuery is licensed, not sold. All rights, title, and interest in and to the Software, including all intellectual property rights, remain solely with the Licensor.
+
+4. Termination
+This license is automatically terminated if the User breaches any term of this Agreement. Upon termination, the User must immediately delete all copies of the Software.
+
+5. Disclaimer of Warranty
+The Software is provided “as is” without warranty of any kind. The Licensor disclaims all warranties, express or implied, including, but not limited to, warranties of merchantability, fitness for a particular purpose, and non-infringement.
+
+6. Limitation of Liability
+In no event shall the Licensor be liable for any damages, including but not limited to direct, indirect, incidental, or consequential damages, arising out of the use or inability to use the Software.
+
+7. Governing Law
+This Agreement shall be governed by and construed in accordance with the laws of [Your Country or State], without regard to its conflict of law provisions.
+
+8. Contact
+For inquiries or permission requests, contact:
+[Suicixde]
+Email: galmx@proton.me
+Website: phttps://github.com/xdrew87/PhantomQuery.git

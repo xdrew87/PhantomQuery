@@ -43,7 +43,7 @@ PhantomQuery is an advanced intelligence gathering platform designed to provide 
 
 ## Usage
 
-1. Navigate to the web interface (default: http://localhost:5000)
+1. Navigate to the web interface (default: http:// localhost:5000)
 2. Select the lookup type (Phone, Inmate, or Email)
 3. Enter the required search parameters
 4. Review and analyze the returned data
